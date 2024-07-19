@@ -92,8 +92,9 @@ class CategoryDetail extends Component {
   // apis
   apiPostCategory(cate) {
     const config = { headers: { "x-access-token": this.context.token } };
-    axios.post("/admin/categories", cate, config).then((res) => {
+    axios.post("/api/admin/categories", cate, config).then((res) => {
       const result = res.data;
+      console.log(result);
       if (result) {
         alert("OK BABY!");
         this.apiGetCategories();

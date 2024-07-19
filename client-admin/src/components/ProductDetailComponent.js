@@ -110,6 +110,7 @@ class ProductDetail extends Component {
                       this.setState({ cmbCategory: e.target.value });
                     }}
                   >
+                    <option value="select">---select---</option>
                     {cates}
                   </select>
                 </td>
@@ -166,20 +167,26 @@ class ProductDetail extends Component {
   componentDidMount() {
     this.apiGetCategories();
   }
+
   componentDidUpdate(prevProps) {
     if (this.props.item !== prevProps.item) {
       this.setState({
-        txtID: this.props.item._id,
-        txtName: this.props.item.name,
-        txtPrice: this.props.item.price,
-        cmbCategory: this.props.item.category._id,
-        imgProduct: "data:image/jpg;base64," + this.props.item.image,
-        imgDetails: this.props.item.imageDetails.map(
-          (image) => "data:image/jpg.base64," + image
-        ),
+        txtID: this.props.item?._id || "",
+        txtName: this.props.item?.name || "",
+        txtPrice: this.props.item?.price || 0,
+        cmbCategory: this.props.item?.category?._id || "",
+        imgProduct: this.props.item?.image
+          ? "data:image/jpg;base64," + this.props.item.image
+          : "",
+        imgDetails: this.props.item?.imageDetails
+          ? this.props.item.imageDetails.map(
+              (image) => "data:image/jpg;base64," + image
+            )
+          : [],
       });
     }
   }
+
   // event-handlers
   previewImage(e) {
     const file = e.target.files[0];
@@ -191,6 +198,7 @@ class ProductDetail extends Component {
       reader.readAsDataURL(file);
     }
   }
+
   previewImageDetails(e) {
     const files = e.target.files;
     if (files.length > 0) {
@@ -220,37 +228,7 @@ class ProductDetail extends Component {
       this.setState({ categories: result });
     });
   }
-  // event-handlers-add
-  btnAddClick(e) {
-    e.preventDefault();
-    const name = this.state.txtName;
-    const price = parseInt(this.state.txtPrice);
-    const category = this.state.cmbCategory;
-    const image = this.state.imgProduct.replace(
-      /^data:image\/[a-z]+;base64,/,
-      ""
-    ); // remove "data:image/...;base64,"
 
-    const imageDetails = this.state.imgDetails.map((img) =>
-      img.replace(/^data:image\/[a-z]+;base64,/, "")
-    ); // remove "data:image/...;base64
-
-    if (name && price && category && image && imageDetails.length > 0) {
-      const prod = {
-        name: name,
-        price: price,
-        category: category,
-        image: image,
-        imageDetails: imageDetails,
-      };
-      this.apiPostProduct(prod);
-    } else {
-      alert(
-        "Please input name and price and category and image and image details"
-      );
-    }
-  }
-  // apis
   apiPostProduct(prod) {
     const config = { headers: { "x-access-token": this.context.token } };
     axios.post("/api/admin/products", prod, config).then((res) => {
@@ -263,6 +241,7 @@ class ProductDetail extends Component {
       }
     });
   }
+
   apiGetProducts() {
     const config = { headers: { "x-access-token": this.context.token } };
     axios
@@ -290,7 +269,71 @@ class ProductDetail extends Component {
         }
       });
   }
-  // event-handlers-update
+
+  apiPutProduct(id, prod) {
+    const config = { headers: { "x-access-token": this.context.token } };
+    axios
+      .put("/api/admin/products/" + id, prod, config)
+      .then((res) => {
+        const result = res.data;
+        console.log(result);
+        if (result) {
+          alert("OK BABY!");
+          this.apiGetProducts();
+        } else {
+          alert("SORRY BABY!");
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        alert("Error updating product. Please try again.");
+      });
+  }
+
+  apiDeleteProduct(id) {
+    const config = { headers: { "x-access-token": this.context.token } };
+    axios.delete("/api/admin/products/" + id, config).then((res) => {
+      const result = res.data;
+      if (result) {
+        alert("OK BABY!");
+        this.apiGetProducts();
+      } else {
+        alert("SORRY BABY!");
+      }
+    });
+  }
+
+  // event-handlers
+  btnAddClick(e) {
+    e.preventDefault();
+    const name = this.state.txtName;
+    const price = parseInt(this.state.txtPrice);
+    const category = this.state.cmbCategory;
+    const image = this.state.imgProduct.replace(
+      /^data:image\/[a-z]+;base64,/,
+      ""
+    ); // remove "data:image/...;base64,"
+
+    const imageDetails = this.state.imgDetails.map((img) =>
+      img.replace(/^data:image\/[a-z]+;base64,/, "")
+    ); // remove "data:image/...;base64"
+
+    if (name && price && category && image && imageDetails.length > 0) {
+      const prod = {
+        name: name,
+        price: price,
+        category: category,
+        image: image,
+        imageDetails: imageDetails,
+      };
+      this.apiPostProduct(prod);
+    } else {
+      alert(
+        "Please input name and price and category and image and image details"
+      );
+    }
+  }
+
   btnUpdateClick(e) {
     e.preventDefault();
     const id = this.state.txtID;
@@ -304,7 +347,7 @@ class ProductDetail extends Component {
 
     const imageDetails = this.state.imgDetails.map((img) =>
       img.replace(/^data:image\/[a-z]+;base64,/, "")
-    ); // remove "data:image/...;base64
+    ); // remove "data:image/...;base64"
 
     if (
       id &&
@@ -313,7 +356,7 @@ class ProductDetail extends Component {
       category &&
       category !== "select" &&
       image &&
-      imageDetails.length > 0
+      imageDetails.length > 0 // change this condition
     ) {
       const prod = {
         name: name,
@@ -329,20 +372,7 @@ class ProductDetail extends Component {
       );
     }
   }
-  // apis
-  apiPutProduct(id, prod) {
-    const config = { headers: { "x-access-token": this.context.token } };
-    axios.put("/api/admin/products/" + id, prod, config).then((res) => {
-      const result = res.data;
-      if (result) {
-        alert("OK BABY!");
-        this.apiGetProducts();
-      } else {
-        alert("SORRY BABY!");
-      }
-    });
-  }
-  // event-handlers-delete
+
   btnDeleteClick(e) {
     e.preventDefault();
     if (window.confirm("ARE YOU SURE?")) {
@@ -353,19 +383,6 @@ class ProductDetail extends Component {
         alert("Please input id");
       }
     }
-  }
-  // apis
-  apiDeleteProduct(id) {
-    const config = { headers: { "x-access-token": this.context.token } };
-    axios.delete("/api/admin/products/" + id, config).then((res) => {
-      const result = res.data;
-      if (result) {
-        alert("OK BABY!");
-        this.apiGetProducts();
-      } else {
-        alert("SORRY BABY!");
-      }
-    });
   }
 }
 export default ProductDetail;
