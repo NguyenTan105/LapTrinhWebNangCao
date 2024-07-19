@@ -44,7 +44,7 @@ class Statistics extends Component {
 
   render() {
     return (
-      <div className="text-center">
+      <div className="main px-3">
         <h2>STATISTICS</h2>
         <table className="align-center">
           <tbody>

@@ -13,7 +13,7 @@ class CategoryDetail extends Component {
   }
   render() {
     return (
-      <div className="float-right">
+      <div className="main px-3">
         <h2 className="text-center">CATEGORY DETAIL</h2>
         <form>
           <table>

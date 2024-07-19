@@ -27,7 +27,7 @@ class Category extends Component {
     });
     return (
       <div>
-        <div className="float-left">
+        <div className="main px-3">
           <h2 className="text-center">CATEGORY LIST</h2>
           <table className="datatable" border="1">
             <tbody>
