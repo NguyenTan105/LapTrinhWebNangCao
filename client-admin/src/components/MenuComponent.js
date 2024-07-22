@@ -8,17 +8,26 @@ import Order from "./OrderComponent";
 import Customer from "./CustomerComponent";
 import Statistics from "./StatisticsComponent";
 import Home from "./HomeComponent";
-class Menu1 extends Component {
+import "./MenuComponent.css";
+class Menu extends Component {
   static contextType = MyContext; // using this.context to access global state
 
   componentDidMount() {
     const hamBurger = document.querySelector("#toggle-btn");
     hamBurger.addEventListener("click", this.handleToggle);
+
+    // Adding the script for active class
+    this.addActiveClassScript();
+    // Set default active item
+    this.setActiveItem();
   }
 
   componentWillUnmount() {
     const hamBurger = document.querySelector("#toggle-btn");
     hamBurger.removeEventListener("click", this.handleToggle);
+
+    // Removing the script for active class
+    this.removeActiveClassScript();
   }
 
   handleToggle = () => {
@@ -31,6 +40,51 @@ class Menu1 extends Component {
     localStorage.removeItem("admin_token");
   };
 
+  addActiveClassScript = () => {
+    var header = document.getElementById("sidebar-nav");
+    var btns = header.getElementsByClassName("sidebar-item");
+    for (var i = 0; i < btns.length; i++) {
+      btns[i].addEventListener("click", this.handleActiveClass);
+    }
+  };
+
+  removeActiveClassScript = () => {
+    var header = document.getElementById("sidebar-nav");
+    var btns = header.getElementsByClassName("sidebar-item");
+    for (var i = 0; i < btns.length; i++) {
+      btns[i].removeEventListener("click", this.handleActiveClass);
+    }
+  };
+
+  handleActiveClass = (event) => {
+    var current = document.getElementsByClassName("active");
+    if (current[0]) {
+      current[0].className = current[0].className.replace(" active", "");
+    }
+    event.currentTarget.className += " active";
+  };
+
+  setActiveItem = () => {
+    const currentPath = window.location.pathname;
+    const sidebarNav = document.getElementById("sidebar-nav");
+    const links = sidebarNav.getElementsByTagName("a");
+
+    for (let link of links) {
+      if (link.getAttribute("href") === currentPath) {
+        link.parentElement.classList.add("active");
+        break;
+      }
+    }
+
+    // Set default to home if no active item found
+    const current = document.getElementsByClassName("active");
+    if (current.length === 0) {
+      sidebarNav
+        .querySelector("a[href='/admin/home']")
+        .parentElement.classList.add("active");
+    }
+  };
+
   render() {
     return (
       <div className="wrapper">
@@ -40,15 +94,15 @@ class Menu1 extends Component {
               <i className="lni lni-grid-alt"></i>
             </button>
             <div className="sidebar-logo">
-              <Link href="/admin/home">
+              <Link to="/admin/home">
                 <b>{this.context.username}</b>
               </Link>
             </div>
           </div>
-          <ul className="sidebar-nav">
+          <ul id="sidebar-nav" className="sidebar-nav">
             <li className="sidebar-item">
               <Link className="sidebar-link" to="/admin/home">
-                <i class="lni lni-home"></i> <span>Home</span>
+                <i className="lni lni-home"></i> <span>Home</span>
               </Link>
             </li>
             <li className="sidebar-item">
@@ -58,22 +112,22 @@ class Menu1 extends Component {
             </li>
             <li className="sidebar-item">
               <Link className="sidebar-link" to="/admin/product">
-                <i class="lni lni-delivery"></i> <span>Product</span>
+                <i className="lni lni-delivery"></i> <span>Product</span>
               </Link>
             </li>
             <li className="sidebar-item">
               <Link className="sidebar-link" to="/admin/order">
-                <i class="lni lni-shopping-basket"></i> <span>Order</span>
+                <i className="lni lni-shopping-basket"></i> <span>Order</span>
               </Link>
             </li>
             <li className="sidebar-item">
               <Link className="sidebar-link" to="/admin/customer">
-                <i class="lni lni-customer"></i> <span>Customer</span>
+                <i className="lni lni-customer"></i> <span>Customer</span>
               </Link>
             </li>
             <li className="sidebar-item">
               <Link className="sidebar-link" to="/admin/statistics">
-                <i class="lni lni-dashboard"></i> <span>Statistics</span>
+                <i className="lni lni-dashboard"></i> <span>Statistics</span>
               </Link>
             </li>
           </ul>
@@ -104,4 +158,4 @@ class Menu1 extends Component {
   }
 }
 
-export default Menu1;
+export default Menu;

@@ -13,8 +13,8 @@ class CategoryDetail extends Component {
   }
   render() {
     return (
-      <div className="main px-3">
-        <h2 className="text-center">CATEGORY DETAIL</h2>
+      <div className="main px-3 py-3">
+        <h2 className="">Category detail</h2>
         <form>
           <table>
             <tbody>

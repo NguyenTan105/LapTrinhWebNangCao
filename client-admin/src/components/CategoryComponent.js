@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { Component } from "react";
 import MyContext from "../contexts/MyContext";
 import CategoryDetail from "./CategoryDetailComponent";
+import { Link } from "react-router-dom";
 
 class Category extends Component {
   static contextType = MyContext; // using this.context to access global state
@@ -15,36 +16,34 @@ class Category extends Component {
   render() {
     const cates = this.state.categories.map((item) => {
       return (
-        <tr
+        <div
           key={item._id}
-          className="datatable"
+          className="products-row"
           onClick={() => this.trItemClick(item)}
         >
-          <td>{item._id}</td>
-          <td>{item.name}</td>
-        </tr>
+          <div className="product-cell id">{item._id.slice(-4)}</div>
+          <div className="product-cell name">{item.name}</div>
+        </div>
       );
     });
     return (
-      <div>
-        <div className="main px-3">
-          <h2 className="text-center">CATEGORY LIST</h2>
-          <table className="datatable" border="1">
-            <tbody>
-              <tr className="datatable">
-                <th>ID</th>
-                <th>Name</th>
-              </tr>
-              {cates}
-            </tbody>
-          </table>
+      <div className="main p-3 app-container">
+        <Link to="/admin/category" style={{ color: "aqua" }}>
+          <h3>Category list</h3>
+        </Link>
+        <div className="products-area-wrapper tableView">
+          <div className="products-header">
+            <div className="product-cell id">ID</div>
+            <div className="product-cell name">Name</div>
+          </div>
+          {cates}
+          <div>
+            <CategoryDetail
+              item={this.state.itemSelected}
+              updateCategories={this.updateCategories}
+            />
+          </div>
         </div>
-        <div className="inline" />
-        <CategoryDetail
-          item={this.state.itemSelected}
-          updateCategories={this.updateCategories}
-        />
-        <div className="float-clear" />
       </div>
     );
   }

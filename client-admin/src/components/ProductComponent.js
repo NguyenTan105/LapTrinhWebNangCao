@@ -2,8 +2,9 @@ import axios from "axios";
 import React, { Component } from "react";
 import MyContext from "../contexts/MyContext";
 import ProductDetail from "./ProductDetailComponent";
-
-class Product extends Component {
+import { Link } from "react-router-dom";
+import "./ProductComponent.css";
+class Product1 extends Component {
   static contextType = MyContext; // using this.context to access global state
   constructor(props) {
     super(props);
@@ -17,25 +18,40 @@ class Product extends Component {
   render() {
     const prods = this.state.products.map((item) => {
       return (
-        <tr
+        <div
           key={item._id}
-          className="datatable"
+          className="products-row"
           onClick={() => this.trItemClick(item)}
         >
-          <td>{item._id}</td>
-          <td>{item.name}</td>
-          <td>{item.price}</td>
-          <td>{new Date(item.cdate).toLocaleString()}</td>
-          <td>{item.category.name}</td>
-          <td>
+          <div className="product-cell id">
+            <span className="cell-label">ID:</span>
+            {/* {item._id} */}
+            {item._id.slice(-4)}
+          </div>
+          <div className="product-cell name">
+            <span className="cell-label">Name:</span>
+            {item.name}
+          </div>
+          <div className="product-cell price">
+            <span className="cell-label">Price:</span>
+            {item.price}
+          </div>
+          <div className="product-cell cdate">
+            {new Date(item.cdate).toLocaleString()}
+          </div>
+          <div className="product-cell category">
+            <span className="cell-label">Category:</span>
+            {item.category.name}
+          </div>
+          <div className="product-cell image">
             <img
               src={"data:image/jpg;base64," + item.image}
               width="100px"
               height="100px"
               alt=""
             />
-          </td>
-          <td>
+          </div>
+          <div className="product-cell imageDetail">
             {item.imageDetails.length > 0 ? (
               item.imageDetails.map((image, index) => (
                 <img
@@ -49,8 +65,8 @@ class Product extends Component {
             ) : (
               <span>n/a</span>
             )}
-          </td>
-        </tr>
+          </div>
+        </div>
       );
     });
     const pagination = Array.from(
@@ -58,7 +74,7 @@ class Product extends Component {
       (_, index) => {
         if (index + 1 === this.state.curPage) {
           return (
-            <span key={index}>
+            <span key={index} style={{ color: "yellow" }}>
               | <b>{index + 1}</b> |
             </span>
           );
@@ -76,34 +92,30 @@ class Product extends Component {
       }
     );
     return (
-      <div>
-        <div className="main px-3">
-          <h2 className="text-center">PRODUCT LIST</h2>
-          <table className="datatable" border="1">
-            <tbody>
-              <tr className="datatable">
-                <th>ID</th>
-                <th>Name</th>
-                <th>Price</th>
-                <th>Creation date</th>
-                <th>Category</th>
-                <th>Image</th>
-                <th>Image details</th>
-              </tr>
-              {prods}
-              <tr>
-                <td colSpan="6">{pagination}</td>
-              </tr>
-            </tbody>
-          </table>
+      <div className="main p-3 app-container">
+        <Link to="/admin/home" style={{ color: "aqua" }}>
+          <h3>Product</h3>
+        </Link>
+        <div className="products-area-wrapper tableView">
+          <div className="products-header">
+            <div className="product-cell id">ID</div>
+            <div className="product-cell name">Items</div>
+            <div className="product-cell price">Price</div>
+            <div className="product-cell cdate">Create date</div>
+            <div className="product-cell category">Categories</div>
+            <div className="product-cell image">Image</div>
+            <div className="product-cell imageDetail">Image detail</div>
+          </div>
+          {prods}
+          <div className="footer">{pagination}</div>
+          <div>
+            <ProductDetail
+              item={this.state.itemSelected}
+              curPage={this.state.curPage}
+              updateProducts={this.updateProducts}
+            />
+          </div>
         </div>
-        <div className="inline" />
-        <ProductDetail
-          item={this.state.itemSelected}
-          curPage={this.state.curPage}
-          updateProducts={this.updateProducts}
-        />
-        <div className="float-clear" />
       </div>
     );
   }
@@ -134,4 +146,4 @@ class Product extends Component {
     });
   }
 }
-export default Product;
+export default Product1;

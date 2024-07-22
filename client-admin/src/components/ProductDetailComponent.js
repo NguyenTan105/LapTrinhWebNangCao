@@ -38,7 +38,7 @@ class ProductDetail extends Component {
     });
     return (
       <div className="main px-3">
-        <h2 className="text-center">PRODUCT DETAIL</h2>
+        <h2 className="">Product detail</h2>
         <form>
           <table>
             <tbody>
@@ -133,29 +133,6 @@ class ProductDetail extends Component {
                     value="DELETE"
                     onClick={(e) => this.btnDeleteClick(e)}
                   />
-                </td>
-              </tr>
-              <tr>
-                <td colSpan="2">
-                  <img
-                    src={this.state.imgProduct}
-                    width="300px"
-                    height="300px"
-                    alt=""
-                  />
-                </td>
-              </tr>
-              <tr>
-                <td colSpan="2">
-                  {this.state.imgDetails.map((image, index) => {
-                    <img
-                      key={index}
-                      src={image}
-                      width="100px"
-                      height="100px"
-                      alt=""
-                    />;
-                  })}
                 </td>
               </tr>
             </tbody>

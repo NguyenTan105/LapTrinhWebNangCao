@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { Component } from "react";
 import MyContext from "../contexts/MyContext";
+import { Link } from "react-router-dom";
 
 class Order extends Component {
   static contextType = MyContext; // using this.context to access global state
@@ -14,18 +15,20 @@ class Order extends Component {
   render() {
     const orders = this.state.orders.map((item) => {
       return (
-        <tr
+        <div
           key={item._id}
-          className="datatable"
+          className="products-row"
           onClick={() => this.trItemClick(item)}
         >
-          <td>{item._id}</td>
-          <td>{new Date(item.cdate).toLocaleString()}</td>
-          <td>{item.customer.name}</td>
-          <td>{item.customer.phone}</td>
-          <td>{item.total}</td>
-          <td>{item.status}</td>
-          <td>
+          <div className="product-cell id">{item._id.slice(-4)}</div>
+          <div className="product-cell cdate">
+            {new Date(item.cdate).toLocaleString()}
+          </div>
+          <div className="product-cell cusName">{item.customer.name}</div>
+          <div className="product-cell phone">{item.customer.phone}</div>
+          <div className="product-cell total">{item.total}</div>
+          <div className="product-cell status">{item.status}</div>
+          <div className="product-cell action">
             {item.status === "PENDING" ? (
               <div>
                 <div>
@@ -47,72 +50,76 @@ class Order extends Component {
             ) : (
               <div />
             )}
-          </td>
-        </tr>
+          </div>
+        </div>
       );
     });
     if (this.state.order) {
       var items = this.state.order.items.map((item, index) => {
         return (
-          <tr key={item.product._id} className="datatable">
-            <td>{index + 1}</td>
-            <td>{item.product._id}</td>
-            <td>{item.product.name}</td>
-            <td>
+          <div key={item.product._id} className="products-row">
+            <div className="product-cell id">{index + 1}</div>
+            <div className="product-cell prodId">
+              {item.product._id.slice(-4)}
+            </div>
+            <div className="product-cell name">{item.product.name}</div>
+            <div className="product-cell image">
               <img
                 src={"data:image/jpg;base64," + item.product.image}
                 width="70px"
                 height="70px"
                 alt=""
               />
-            </td>
-            <td>{item.product.price}</td>
-            <td>{item.quantity}</td>
-            <td>{item.product.price * item.quantity}</td>
-          </tr>
+            </div>
+            <div className="product-cell price">{item.product.price}</div>
+            <div className="product-cell quantity">{item.quantity}</div>
+            <div className="product-cell total">
+              {item.product.price * item.quantity}
+            </div>
+          </div>
         );
       });
     }
     return (
-      <div>
-        <div className="main px-3">
-          <h2 className="text-center">ORDER LIST</h2>
-          <table className="datatable" border="1">
-            <tbody>
-              <tr className="datatable">
-                <th>ID</th>
-                <th>Creation date</th>
-                <th>Cust.name</th>
-                <th>Cust.phone</th>
-                <th>Total</th>
-                <th>Status</th>
-                <th>Action</th>
-              </tr>
-              {orders}
-            </tbody>
-          </table>
-        </div>
-        {this.state.order ? (
-          <div className="align-center">
-            <h2 className="text-center">ORDER DETAIL</h2>
-            <table className="datatable" border="1">
-              <tbody>
-                <tr className="datatable">
-                  <th>No.</th>
-                  <th>Prod.ID</th>
-                  <th>Prod.name</th>
-                  <th>Image</th>
-                  <th>Price</th>
-                  <th>Quantity</th>
-                  <th>Amount</th>
-                </tr>
-                {items}
-              </tbody>
-            </table>
+      <div className="main p-3 app-container">
+        <div className="p-2">
+          <Link to="/admin/order" style={{ color: "aqua" }}>
+            <h3>Order list</h3>
+          </Link>
+          <div className="products-area-wrapper tableView ">
+            <div className="products-header">
+              <div className="product-cell id">ID</div>
+              <div className="product-cell cdate">Creation date</div>
+              <div className="product-cell cusName">Name</div>
+              <div className="product-cell phone">Phone</div>
+              <div className="product-cell total">Total</div>
+              <div className="product-cell status">Status</div>
+              <div className="product-cell action">Action</div>
+            </div>
+            {orders}
+            {this.state.order ? (
+              <div className="my-3 px-3">
+                <Link to="/admin/order" style={{ color: "white" }}>
+                  <h3>Order detail</h3>
+                </Link>
+                <div className="tableView">
+                  <div className="products-header">
+                    <div className="product-cell id">No.</div>
+                    <div className="product-cell prodId">Prod.ID</div>
+                    <div className="product-cell name">Prod.name</div>
+                    <div className="product-cell image">Image</div>
+                    <div className="product-cell price">Price</div>
+                    <div className="product-cell quantity">Quantity</div>
+                    <div className="product-cell amount">Amount</div>
+                  </div>
+                  {items}
+                </div>
+              </div>
+            ) : (
+              <div />
+            )}
           </div>
-        ) : (
-          <div />
-        )}
+        </div>
       </div>
     );
   }

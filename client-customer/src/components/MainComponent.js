@@ -25,7 +25,7 @@ class Main extends Component {
       <div className="body-customer">
         <ToastContainer autoClose={3000} />
         <Menu />
-        <Inform />
+        {/* <Inform /> */}
         <TawkMessenger />
         <Routes>
           <Route path="/" element={<Navigate replace to="/home" />} />

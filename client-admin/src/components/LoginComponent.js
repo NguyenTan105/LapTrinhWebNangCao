@@ -16,14 +16,16 @@ class Login extends Component {
   render() {
     if (this.context.token === "") {
       return (
-        <div className="">
+        <div className="" style={{ backgroundColor: "white" }}>
           <div className="l-form">
             <div className="shape1"></div>
             <div className="shape2"></div>
 
             <div className="form">
               <form className="form__content">
-                <h1 className="form__title">Admin</h1>
+                <h1 className="form__title" style={{ color: "black" }}>
+                  Admin
+                </h1>
 
                 <div className="form__div form__div-one">
                   <div className="form__icon">
