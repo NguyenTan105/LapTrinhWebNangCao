@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import Menu from "./MenuComponent";
-import Inform from "./InformComponent";
 import Home from "./HomeComponent";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Product from "./ProductComponent";
