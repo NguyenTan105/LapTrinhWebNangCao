@@ -19,6 +19,7 @@ const CategorySchema = mongoose.Schema(
 const CustomerSchema = mongoose.Schema(
   {
     _id: mongoose.Schema.Types.ObjectId,
+    avatar: String,
     username: String,
     password: String,
     name: String,

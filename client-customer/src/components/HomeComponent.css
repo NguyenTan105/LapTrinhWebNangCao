@@ -1,0 +1,46 @@
+.card-field {
+  border-style: outset;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Căn giữa theo chiều ngang */
+  justify-content: center; /* Căn giữa theo chiều dọc nếu cần */
+  background-color: white;
+  overflow: hidden; /* Ngăn không cho ảnh phóng to ra ngoài */
+  position: relative; /* Đặt thành relative để chứa ảnh */
+}
+
+.card-field img {
+  border-radius: 15px; /* Bo góc cho ảnh nếu cần */
+  transition: transform 0.2s; /* Thay đổi kích thước ảnh */
+  position: relative; /* Đặt thành relative nếu không dùng absolute */
+  z-index: 1; /* Đặt z-index để ảnh không bị đè lên các phần tử khác */
+}
+
+.card-field img:hover {
+  transform: scale(
+    1.05
+  ); /* Phóng to ảnh mà không làm thay đổi kích thước của card */
+  z-index: 2; /* Đặt z-index để ảnh nổi bật hơn khi hover */
+}
+
+figcaption {
+  padding: 10px 10px 0px 10px;
+}
+
+.nameProd {
+  color: rgb(58, 58, 179);
+  min-height: 48px;
+}
+
+.priceProd {
+  color: red;
+  font-size: 20px;
+}
+.home {
+  background-image: url("background.jpg");
+  background-repeat: no-repeat;
+  background-size: cover; /* Đảm bảo hình nền phủ toàn bộ phần tử */
+  background-position: center; /* Đảm bảo hình nền căn giữa */
+  min-height: 100vh; /* Chiều cao tối thiểu là chiều cao của viewport */
+  width: 100%; /* Đảm bảo phần tử chiếm toàn bộ chiều rộng của viewport */
+}

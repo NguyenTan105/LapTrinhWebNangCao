@@ -1,140 +1,148 @@
 import axios from "axios";
-import React, { Component } from "react";
-import withRouter from "../utils/withRouter";
+import React, { useState, useEffect, useContext } from "react";
+import { Link, useParams } from "react-router-dom";
 import MyContext from "../contexts/MyContext";
+import "./ProductDetailComponent.css";
 
-class ProductDetail extends Component {
-  static contextType = MyContext; // using this.context to access global state
-  constructor(props) {
-    super(props);
-    this.state = {
-      product: null,
-      txtQuantity: 1,
-      imgSelected: null,
-    };
-  }
-  render() {
-    const prod = this.state.product;
-    if (prod != null) {
-      return (
-        <div className="align-center">
-          <h2 className="text-center">PRODUCT DETAILS</h2>
-          <figure className="caption-right">
-            <div>
-              {this.state.imgSelected == null ? (
-                <img
-                  src={`data:image/jpg;base64,${prod.image}`}
-                  width="400px"
-                  height="400px"
-                  alt=""
-                />
-              ) : (
-                <img
-                  src={`data:image/jpg;base64,${this.state.imgSelected}`}
-                  width="400px"
-                  height="400px"
-                  alt=""
-                />
-              )}
-              <div className="align-center">
-                {prod.imageDetails.map((image, index) => (
+const ProductDetail = () => {
+  const { id, cid, keyword } = useParams(); // Get parameters from URL
+  const [product, setProduct] = useState(null);
+  const [txtQuantity, setTxtQuantity] = useState(1);
+  const [imgSelected, setImgSelected] = useState(null);
+  const context = useContext(MyContext); // Access global state
+
+  useEffect(() => {
+    if (id) {
+      apiGetProduct(id);
+    }
+  }, [id]);
+
+  const apiGetProduct = async (id) => {
+    try {
+      const response = await axios.get(`/api/customer/products/${id}`);
+      setProduct(response.data);
+    } catch (error) {
+      console.error("Error fetching product", error);
+    }
+  };
+
+  const btnAdd2CartClick = (e) => {
+    e.preventDefault();
+    if (product) {
+      const quantity = parseInt(txtQuantity);
+      if (quantity) {
+        const mycart = context.mycart;
+        const index = mycart.findIndex((x) => x.product._id === product._id);
+        if (index === -1) {
+          const newItem = { product: product, quantity: quantity };
+          mycart.push(newItem);
+        } else {
+          mycart[index].quantity += quantity;
+        }
+        context.setMycart(mycart);
+        alert("Successfully!");
+      } else {
+        alert("Please input quantity");
+      }
+    }
+  };
+
+  if (product) {
+    return (
+      <div className="product-detail">
+        <div className="container py-2">
+          <div>
+            <Link style={{ textDecoration: "none", color: "black" }} to="/home">
+              Home /{" "}
+            </Link>
+            <span>
+              Product ID: <b>{id}</b>
+            </span>
+          </div>
+          <h2 className="text-center" style={{ marginTop: "40px" }}>
+            PRODUCT DETAILS
+          </h2>
+          <figure className="d-flex justify-content-center align-content-center">
+            <div className="row col-12">
+              <div className="col-6 d-flex flex-column align-items-end">
+                {imgSelected === null ? (
                   <img
-                    key={index}
-                    src={`data:image/jpg;base64,${image}`}
-                    width="100px"
-                    height="100px"
+                    src={`data:image/jpg;base64,${product.image}`}
+                    width="400px"
+                    height="400px"
                     alt=""
-                    onClick={() => this.setState({ imgSelected: image })}
                   />
-                ))}
+                ) : (
+                  <img
+                    src={`data:image/jpg;base64,${imgSelected}`}
+                    width="400px"
+                    height="400px"
+                    alt=""
+                  />
+                )}
+                <div className="align-center">
+                  {product.imageDetails.map((image, index) => (
+                    <img
+                      key={index}
+                      src={`data:image/jpg;base64,${image}`}
+                      width="100px"
+                      height="100px"
+                      alt=""
+                      onClick={() => setImgSelected(image)}
+                    />
+                  ))}
+                </div>
               </div>
-            </div>
-            <figcaption>
-              <form>
-                <table>
-                  <tbody>
-                    <tr>
-                      <td align="right">ID:</td>
-                      <td>{prod._id}</td>
-                    </tr>
-                    <tr>
-                      <td align="right">Name:</td>
-                      <td>{prod.name}</td>
-                    </tr>
-                    <tr>
-                      <td align="right">Price:</td>
-                      <td>{prod.price}</td>
-                    </tr>
-                    <tr>
-                      <td align="right">Category:</td>
-                      <td>{prod.category.name}</td>
-                    </tr>
-                    <tr>
-                      <td align="right">Quantity:</td>
-                      <td>
+              <figcaption className="col-5 d-flex justify-content-start align-items-center">
+                <form className="d-flex flex-column">
+                  <div className="form-group">
+                    <div className="form-row">
+                      <div className="form-label">ID:</div>
+                      <div className="form-value">{product._id}</div>
+                    </div>
+                    <div className="form-row">
+                      <div className="form-label">Name:</div>
+                      <div className="form-value">{product.name}</div>
+                    </div>
+                    <div className="form-row">
+                      <div className="form-label">Price:</div>
+                      <div className="form-value">{product.price}</div>
+                    </div>
+                    <div className="form-row">
+                      <div className="form-label">Category:</div>
+                      <div className="form-value">{product.category.name}</div>
+                    </div>
+                    <div className="form-row">
+                      <div className="form-label">Quantity:</div>
+                      <div className="form-value">
                         <input
                           type="number"
                           min="1"
                           max="99"
-                          value={this.state.txtQuantity}
-                          onChange={(e) => {
-                            this.setState({ txtQuantity: e.target.value });
-                          }}
+                          value={txtQuantity}
+                          onChange={(e) => setTxtQuantity(e.target.value)}
                         />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td></td>
-                      <td>
+                      </div>
+                    </div>
+                    <div className="mx-auto">
+                      <div className="form-value">
                         <input
                           type="submit"
                           value="ADD TO CART"
-                          onClick={(e) => this.btnAdd2CartClick(e)}
+                          onClick={btnAdd2CartClick}
                         />
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </form>
-            </figcaption>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </figcaption>
+            </div>
           </figure>
         </div>
-      );
-    }
-    return <div />;
+      </div>
+    );
   }
-  componentDidMount() {
-    const params = this.props.params;
-    this.apiGetProduct(params.id);
-  }
-  // apis
-  apiGetProduct(id) {
-    axios.get("/api/customer/products/" + id).then((res) => {
-      const result = res.data;
-      this.setState({ product: result });
-    });
-  }
-  // event-handlers
-  btnAdd2CartClick(e) {
-    e.preventDefault();
-    const product = this.state.product;
-    const quantity = parseInt(this.state.txtQuantity);
-    if (quantity) {
-      const mycart = this.context.mycart;
-      const index = mycart.findIndex((x) => x.product._id === product._id); // check if the _id exists in mycart
-      if (index === -1) {
-        // not found, push newItem
-        const newItem = { product: product, quantity: quantity };
-        mycart.push(newItem);
-      } else {
-        // increasing the quantity
-        mycart[index].quantity += quantity;
-      }
-      this.context.setMycart(mycart);
-      alert("OK BABY!");
-    } else {
-      alert("Please input quantity");
-    }
-  }
-}
-export default withRouter(ProductDetail);
+  return <div />;
+};
+
+export default ProductDetail;

@@ -130,9 +130,9 @@ class Resetpwd extends Component {
     axios.post("/api/customer/resetpwd", body).then((res) => {
       const result = res.data;
       if (result) {
-        alert("OK BABY!");
+        alert("Successfully!");
       } else {
-        alert("Sorry");
+        alert("Failed");
       }
     });
   }

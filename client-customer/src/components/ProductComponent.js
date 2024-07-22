@@ -1,94 +1,35 @@
 import axios from "axios";
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import withRouter from "../utils/withRouter";
+import React, { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import "./ProductComponent.css";
 
-class Product extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      products: [],
-      sort: "default",
-    };
-  }
-  render() {
-    const prods = this.state.products.map((item) => {
-      return (
-        <div key={item._id} className="inline">
-          <figure>
-            <Link to={"/product/" + item._id}>
-              <img
-                src={"data:image/jpg;base64," + item.image}
-                width="300px"
-                height="300px"
-                alt=""
-              />
-            </Link>
-            <figcaption className="text-center">
-              {item.name}
-              <br />
-              Price: {item.price}
-            </figcaption>
-          </figure>
-        </div>
-      );
-    });
-    return (
-      <div className="text-center">
-        <h2 className="text-center">LIST PRODUCTS</h2>
-        <div className="py-2" style={{ marginBottom: "20px" }}>
-          <select
-            value={this.state.sort}
-            onChange={(e) => {
-              this.setState({ sort: e.target.value });
-              this.cmbSortChange(e.target.value);
-            }}
-          >
-            <option value="default">------Sort by------</option>
-            <option value="name ASC">Name (a &#8594; z)</option>
-            <option value="name DESC">Name (z &#8594; a)</option>
-            <option value="price ASC">Price (low &#8594; high)</option>
-            <option value="price DESC">Price (high &#8594; low)</option>
-          </select>
-        </div>
-        {prods}
-      </div>
-    );
-  }
-  componentDidMount() {
-    // first: /product/...
-    const params = this.props.params;
-    if (params.cid) {
-      this.apiGetProductsByCatID(params.cid);
-    } else if (params.keyword) {
-      this.apiGetProductsByKeyword(params.keyword);
+function Product() {
+  const [products, setProducts] = useState([]);
+  const [sort, setSort] = useState("default");
+  const { cid, keyword } = useParams();
+
+  useEffect(() => {
+    if (cid) {
+      apiGetProductsByCatID(cid);
+    } else if (keyword) {
+      apiGetProductsByKeyword(keyword);
     }
-  }
-  componentDidUpdate(prevProps) {
-    // changed: /product/...
-    const params = this.props.params;
-    if (params.cid && params.cid !== prevProps.params.cid) {
-      this.apiGetProductsByCatID(params.cid);
-    } else if (params.keyword && params.keyword !== prevProps.params.keyword) {
-      this.apiGetProductsByKeyword(params.keyword);
-    }
-  }
-  // apis
-  apiGetProductsByCatID(cid) {
+  }, [cid, keyword]);
+
+  const apiGetProductsByCatID = (cid) => {
     axios.get("/api/customer/products/category/" + cid).then((res) => {
-      const result = res.data;
-      this.setState({ products: result });
+      setProducts(res.data);
     });
-  }
-  // apis-search
-  apiGetProductsByKeyword(keyword) {
+  };
+
+  const apiGetProductsByKeyword = (keyword) => {
     axios.get("/api/customer/products/search/" + keyword).then((res) => {
-      const result = res.data;
-      this.setState({ products: result });
+      setProducts(res.data);
     });
-  }
-  cmbSortChange(sort) {
-    let sortedProducts = [...this.state.products];
+  };
+
+  const cmbSortChange = (sort) => {
+    let sortedProducts = [...products];
     if (sort === "name ASC") {
       sortedProducts.sort((a, b) => a.name.localeCompare(b.name));
     } else if (sort === "name DESC") {
@@ -98,7 +39,71 @@ class Product extends Component {
     } else if (sort === "price DESC") {
       sortedProducts.sort((a, b) => b.price - a.price);
     }
-    this.setState({ products: sortedProducts });
-  }
+    setProducts(sortedProducts);
+  };
+
+  const prods = products.map((item) => (
+    <div key={item._id} className="card-field col-3">
+      <figure className="card-figure">
+        <Link
+          to={"/product/" + item._id}
+          className="d-flex justify-content-center"
+        >
+          <img
+            src={"data:image/jpg;base64," + item.image}
+            width="300px"
+            height="300px"
+            alt=""
+          />
+        </Link>
+        <figcaption className="d-flex flex-column">
+          <span className="nameProd">{item.name}</span>
+          <span className="priceProd">Price: {item.price} Đ</span>
+        </figcaption>
+      </figure>
+    </div>
+  ));
+
+  return (
+    <div className="home py-2">
+      <div className="container" style={{ marginBottom: "40px" }}>
+        <div>
+          <Link style={{ textDecoration: "none", color: "black" }} to="/home">
+            Home /{" "}
+          </Link>
+          {cid && (
+            <span>
+              Category ID: <b>{cid}</b>
+            </span>
+          )}
+          {keyword && (
+            <span>
+              Search Keyword: <b>{keyword}</b>
+            </span>
+          )}
+        </div>
+        <h2 className="text-center">LIST PRODUCTS</h2>
+        <div style={{ marginBottom: "20px" }}>
+          <select
+            value={sort}
+            onChange={(e) => {
+              setSort(e.target.value);
+              cmbSortChange(e.target.value);
+            }}
+          >
+            <option value="default">------Sort by------</option>
+            <option value="name ASC">Name (a &#8594; z)</option>
+            <option value="name DESC">Name (z &#8594; a)</option>
+            <option value="price ASC">Price (low &#8594; high)</option>
+            <option value="price DESC">Price (high &#8594; low)</option>
+          </select>
+        </div>
+        <div className="d-flex justify-content-center align-content-center">
+          <div className="row col-12">{prods}</div>
+        </div>
+      </div>
+    </div>
+  );
 }
-export default withRouter(Product);
+
+export default Product;

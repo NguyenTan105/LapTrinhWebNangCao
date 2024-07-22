@@ -6,7 +6,7 @@ import Category from "./CategoryComponent";
 import Product from "./ProductComponent";
 import Order from "./OrderComponent";
 import Customer from "./CustomerComponent";
-import Statistics from "./StatisticsComponent";
+// import Statistics from "./StatisticsComponent";
 import Home from "./HomeComponent";
 import "./MenuComponent.css";
 class Menu extends Component {
@@ -125,11 +125,11 @@ class Menu extends Component {
                 <i className="lni lni-customer"></i> <span>Customer</span>
               </Link>
             </li>
-            <li className="sidebar-item">
+            {/* <li className="sidebar-item">
               <Link className="sidebar-link" to="/admin/statistics">
                 <i className="lni lni-dashboard"></i> <span>Statistics</span>
               </Link>
-            </li>
+            </li> */}
           </ul>
           <div className="sidebar-footer">
             <Link
@@ -151,7 +151,7 @@ class Menu extends Component {
           <Route path="/admin/product" element={<Product />} />
           <Route path="/admin/order" element={<Order />} />
           <Route path="/admin/customer" element={<Customer />} />
-          <Route path="/admin/statistics" element={<Statistics />} />
+          {/* <Route path="/admin/statistics" element={<Statistics />} /> */}
         </Routes>
       </div>
     );

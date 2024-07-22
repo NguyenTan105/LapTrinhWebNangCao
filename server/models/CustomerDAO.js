@@ -28,6 +28,7 @@ const CustomerDAO = {
   },
   async update(customer) {
     const newvalues = {
+      avatar: customer.avatar,
       username: customer.username,
       password: customer.password,
       name: customer.name,

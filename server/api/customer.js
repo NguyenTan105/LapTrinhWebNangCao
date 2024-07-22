@@ -77,6 +77,7 @@ router.post("/signup", async function (req, res) {
 // myprofile
 router.put("/customers/:id", JwtUtil.checkToken, async function (req, res) {
   const _id = req.params.id;
+  const avatar = req.body.avatar;
   const username = req.body.username;
   const password = req.body.password;
   const name = req.body.name;
@@ -84,6 +85,7 @@ router.put("/customers/:id", JwtUtil.checkToken, async function (req, res) {
   const email = req.body.email;
   const customer = {
     _id: _id,
+    avatar: avatar,
     username: username,
     password: password,
     name: name,

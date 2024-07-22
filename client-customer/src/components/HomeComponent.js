@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import Slider from "./SliderComponent";
+import "./HomeComponent.css";
 class Home extends Component {
   constructor(props) {
     super(props);
@@ -13,9 +14,12 @@ class Home extends Component {
   render() {
     const newprods = this.state.newprods.map((item) => {
       return (
-        <div key={item._id} className="inline">
+        <div key={item._id} className="card-field col-3">
           <figure>
-            <Link to={"/product/" + item._id}>
+            <Link
+              to={"/product/" + item._id}
+              className="d-flex justify-content-center"
+            >
               <img
                 src={"data:image/jpg;base64," + item.image}
                 width="300px"
@@ -23,10 +27,10 @@ class Home extends Component {
                 alt=""
               />
             </Link>
-            <figcaption className="text-center">
-              {item.name}
+            <figcaption className="">
+              <span className="nameProd">{item.name}</span>
               <br />
-              Price: {item.price}
+              <span className="priceProd">Price: {item.price} Đ</span>
             </figcaption>
           </figure>
         </div>
@@ -34,9 +38,9 @@ class Home extends Component {
     });
     const hotprods = this.state.hotprods.map((item) => {
       return (
-        <div key={item._id} className="inline">
+        <div key={item._id} className="card-field d-flex col-3">
           <figure>
-            <Link to={"/product/" + item._id}>
+            <Link to={"/product/" + item._id} className="">
               <img
                 src={"data:image/jpg;base64," + item.image}
                 width="300px"
@@ -44,31 +48,41 @@ class Home extends Component {
                 alt=""
               />
             </Link>
-            <figcaption className="text-center">
-              {item.name}
+            <figcaption className="">
+              <span className="nameProd">{item.name}</span>
               <br />
-              Price: {item.price}
+              <span className="priceProd">Price: {item.price} Đ</span>
             </figcaption>
           </figure>
         </div>
       );
     });
     return (
-      <div>
+      <div className="home">
         <Slider />
         <div style={{ height: 30 }}></div>
-        <div className="align-center">
-          <h2 className="text-center">NEW PRODUCTS</h2>
-          {newprods}
-        </div>
-        {this.state.hotprods.length > 0 ? (
-          <div className="align-center">
-            <h2 className="text-center">HOT PRODUCTS</h2>
-            {hotprods}
+        <div className="container">
+          <div>
+            <h2 className="text-center" style={{ color: "black" }}>
+              NEW PRODUCTS
+            </h2>
+            <div className="d-flex justify-content-center align-content-center">
+              {newprods}
+            </div>
+            {this.state.hotprods.length > 0 ? (
+              <div className="py-5">
+                <h2 className="text-center">
+                  <b style={{ color: "red" }}>HOT PRODUCTS</b>
+                </h2>
+                <div className="d-flex justify-content-center align-content-center">
+                  {hotprods}
+                </div>
+              </div>
+            ) : (
+              <div />
+            )}
           </div>
-        ) : (
-          <div />
-        )}
+        </div>
       </div>
     );
   }

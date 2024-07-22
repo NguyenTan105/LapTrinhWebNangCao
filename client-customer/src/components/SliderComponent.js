@@ -34,24 +34,27 @@ class Slider extends Component {
     const settings = {
       dots: true,
       infinite: true,
-      speed: 2000,
+      speed: 500,
       slidesToShow: 1,
       slidesToScroll: 1,
       autoplay: true,
-      autoplaySpeed: 2000,
+      autoplaySpeed: 4000,
     };
 
     return (
-      <SlickSlider {...settings}>
-        {images.map((item) => (
-          <img
-            key={item._id}
-            src={`data:image/jpg;base64,${item.image}`}
-            height="300px"
-            alt=""
-          />
-        ))}
-      </SlickSlider>
+      <div className="container p-5">
+        <SlickSlider {...settings}>
+          {images.map((item) => (
+            <img
+              key={item._id}
+              src={`data:image/jpg;base64,${item.image}`}
+              height="400px"
+              alt=""
+              className="rounded-image"
+            />
+          ))}
+        </SlickSlider>
+      </div>
     );
   }
 }

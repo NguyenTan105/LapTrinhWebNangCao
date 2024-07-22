@@ -1,0 +1,41 @@
+.product-detail {
+  background: white !important;
+}
+.col-5 {
+  /* Chiều rộng của phần tử, có thể thay đổi theo nhu cầu */
+  width: 40%;
+}
+
+.d-flex {
+  display: flex;
+}
+
+.justify-content-start {
+  justify-content: flex-start; /* Căn chỉnh nội dung về phía bên trái */
+}
+
+.align-items-center {
+  align-items: center; /* Căn giữa theo chiều dọc */
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Khoảng cách giữa các hàng */
+}
+
+.form-row {
+  display: flex;
+  justify-content: space-between; /* Căn giữa các phần tử con theo chiều ngang */
+  align-items: center; /* Căn giữa các phần tử con theo chiều dọc */
+  margin-bottom: 10px;
+}
+
+.form-label {
+  font-weight: bold;
+  margin-bottom: 0 !important;
+}
+
+.form-value {
+  margin-left: 10px;
+}

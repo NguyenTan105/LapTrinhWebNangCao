@@ -4,7 +4,7 @@ const MyConstants = {
   DB_PASS: "Minhtan2003",
   DB_DATABASE: "shoppingonline",
   JWT_SECRET: "2174802010439", //json web token
-  JWT_EXPIRES: "3600000000", // in milliseconds
+  JWT_EXPIRES: "36000000000", // in milliseconds
   EMAIL_USER: "tannguyenkhacminh112@gmail.com", // gmail service
   EMAIL_PASS: "apzz wipl ggbs iiee",
 };
