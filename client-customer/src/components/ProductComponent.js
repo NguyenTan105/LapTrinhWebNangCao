@@ -51,8 +51,8 @@ function Product() {
         >
           <img
             src={"data:image/jpg;base64," + item.image}
-            width="300px"
-            height="300px"
+            width="250px"
+            height="250px"
             alt=""
           />
         </Link>

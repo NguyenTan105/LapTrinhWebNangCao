@@ -22,8 +22,8 @@ class Home extends Component {
             >
               <img
                 src={"data:image/jpg;base64," + item.image}
-                width="300px"
-                height="300px"
+                width="250px"
+                height="250px"
                 alt=""
               />
             </Link>
@@ -40,11 +40,14 @@ class Home extends Component {
       return (
         <div key={item._id} className="card-field d-flex col-3">
           <figure>
-            <Link to={"/product/" + item._id} className="">
+            <Link
+              to={"/product/" + item._id}
+              className="d-flex justify-content-center"
+            >
               <img
                 src={"data:image/jpg;base64," + item.image}
-                width="300px"
-                height="300px"
+                width="250px"
+                height="250px"
                 alt=""
               />
             </Link>
