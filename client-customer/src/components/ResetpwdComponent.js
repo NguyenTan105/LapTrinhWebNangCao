@@ -14,9 +14,9 @@ class Resetpwd extends Component {
 
   render() {
     return (
-      <div className="align-center">
+      <div className="container">
         <h2 className="text-center">RESET PASSWORD</h2>
-        <form>
+        <form className="d-flex justify-content-center">
           <table className="align-center">
             <tbody>
               <tr>
